@@ -33,7 +33,8 @@ class Module:
         """Set the mode of this module and all descendent modules to `train`."""
         self.training = True
         for _, par in self._parameters.items():
-            par.value.requires_grad_(True)
+            if hasattr(par, "requires_grad_"):
+                par.value.requires_grad_(True)
         for _, mod in self._modules.items():
             mod.train()
 
@@ -41,7 +42,8 @@ class Module:
         """Set the mode of this module and all descendent modules to `eval`."""
         self.training = False
         for _, par in self._parameters.items():
-            par.value.requires_grad_(False)
+            if hasattr(par, "requires_grad_"):
+                par.value.requires_grad_(False)
         for _, mod in self._modules.items():
             mod.eval()
 
@@ -56,8 +58,9 @@ class Module:
         params = list()
         for _, mod in self._modules.items():
             params.extend(mod.named_parameters())
-        for _, param in self._parameters.items():
-            params.append((param.name, param))
+        for pref, mod in self._modules.items():
+            for name, param in mod.named_parameters():
+                params.append((f"{pref}.{name}", param))
         return params
 
     def parameters(self) -> Sequence[Parameter]:
