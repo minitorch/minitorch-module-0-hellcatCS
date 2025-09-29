@@ -56,8 +56,8 @@ class Module:
 
         """
         params = list()
-        for _, mod in self._modules.items():
-            params.extend(mod.named_parameters())
+        for name, param in self._parameters.items():
+            params.append((name, param))
         for pref, mod in self._modules.items():
             for name, param in mod.named_parameters():
                 params.append((f"{pref}.{name}", param))
