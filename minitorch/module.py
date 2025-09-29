@@ -65,11 +65,11 @@ class Module:
 
     def parameters(self) -> Sequence[Parameter]:
         """Enumerate over all the parameters of this module and its descendents."""
-        params_amount = 0
+        params = list()
         for _, mod in self._modules.items():
-            params_amount += mod.parameters()
-        params_amount += len(self.parameters.keys())
-        return params_amount
+            params.extend(mod.parameters())
+        params.extend(self._parameters.values())
+        return params
 
     def add_parameter(self, k: str, v: Any) -> Parameter:
         """Manually add a parameter. Useful helper for scalar parameters.
@@ -90,9 +90,9 @@ class Module:
 
     def __setattr__(self, key: str, val: Parameter) -> None:
         if isinstance(val, Parameter):
-            self.__dict__["_parameters"][key] = val
+            self._parameters[key] = val
         elif isinstance(val, Module):
-            self.__dict__["_modules"][key] = val
+            self._modules[key] = val
         else:
             super().__setattr__(key, val)
 
