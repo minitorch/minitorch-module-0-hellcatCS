@@ -111,9 +111,7 @@ def zipWith(iter1, iter2, func):
     return res
 
 def reduce(iter, func):
-    if len(iter) == 0:
-        return iter
-    elif len(iter) == 0:
+    if len(iter) == 1:
         return func(iter[0])
     res = iter[0]
     for i in range(1, len(iter)):
@@ -126,7 +124,11 @@ def addLists(l1, l2):
     return zipWith(l1, l2, add)
 
 def sum(l):
+    if len(l) == 0:
+        return 0
     return reduce(l, add)
 
 def prod(l):
+    if len(l) == 0:
+        return 1
     return reduce(l, mul)
