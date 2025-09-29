@@ -65,7 +65,7 @@ class Module:
 
     def parameters(self) -> Sequence[Parameter]:
         """Enumerate over all the parameters of this module and its descendents."""
-        params = list()
+        params:list[Parameter] = list()
         for _, mod in self._modules.items():
             params.extend(mod.parameters())
         params.extend(self._parameters.values())
