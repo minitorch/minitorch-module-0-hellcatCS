@@ -112,10 +112,11 @@ def zipWith(iter1, iter2, func):
 
 def reduce(iter, func):
     if len(iter) == 1:
-        return func(iter[0])
+        return iter[0]
     res = iter[0]
     for i in range(1, len(iter)):
         res = func(res, iter[i])
+    return res
 
 def negList(l):
     return map(l, neg)

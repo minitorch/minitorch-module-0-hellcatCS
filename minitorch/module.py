@@ -32,17 +32,17 @@ class Module:
     def train(self) -> None:
         """Set the mode of this module and all descendent modules to `train`."""
         self.training = True
-        for par in self._parameters:
+        for _, par in self._parameters.items():
             par.value.requires_grad_(True)
-        for mod in self._modules:
+        for _, mod in self._modules.items():
             mod.train()
 
     def eval(self) -> None:
         """Set the mode of this module and all descendent modules to `eval`."""
         self.training = False
-        for par in self._parameters:
+        for _, par in self._parameters.items():
             par.value.requires_grad_(False)
-        for mod in self._modules:
+        for _, mod in self._modules.items():
             mod.eval()
 
     def named_parameters(self) -> Sequence[Tuple[str, Parameter]]:
@@ -63,8 +63,8 @@ class Module:
     def parameters(self) -> Sequence[Parameter]:
         """Enumerate over all the parameters of this module and its descendents."""
         params_amount = 0
-        for mod in self._modules:
-            params_amount += mod.named_parameters()
+        for _, mod in self._modules.items():
+            params_amount += mod.parameters()
         params_amount += len(self.parameters.keys())
         return params_amount
 

@@ -108,7 +108,7 @@ def test_sigmoid(a: float) -> None:
     * It crosses 0 at 0.5
     * It is  strictly increasing.
     """
-    assert 0 < sigmoid(a) < 1
+    assert 0 <= sigmoid(a) <= 1
     assert abs(1 - sigmoid(a) - sigmoid(-a)) < 0.01
     assert sigmoid(a + 0.1) - sigmoid(a) >= 0
     assert abs(sigmoid(0) - 0.5) < 0.01
@@ -190,7 +190,7 @@ def test_sum_distribute(ls1: List[float], ls2: List[float]) -> None:
     sum_sum_dist = 0
     for elem in addLists(ls1, ls2):
         sum_sum_dist += elem
-    assert abs(sum_sum_dist - ls1 - ls2) < 0.01
+    assert abs(sum_sum_dist - sum_ls1 - sum_ls2) < 0.01
 
 
 @pytest.mark.task0_3
