@@ -111,7 +111,7 @@ def test_sigmoid(a: float) -> None:
     assert 0 < sigmoid(a) < 1
     assert abs(1 - sigmoid(a) - sigmoid(-a)) < 0.01
     assert sigmoid(a + 0.1) - sigmoid(a) > 0
-    assert abs(sigmoid(0), 0.5) < 0.01
+    assert abs(sigmoid(0) - 0.5) < 0.01
 
 
 @pytest.mark.task0_2
@@ -120,9 +120,11 @@ def test_transitive(a: float, b: float, c: float) -> None:
     """Test the transitive property of less-than (a < b and b < c implies a < c)"""
     arr = [a, b, c]
     arr.sort()
-    assert lt(a, b)
-    assert lt(b, c)
-    assert lt(a, c)
+    if a == b or b == c or a == c:
+        return
+    assert lt(arr[0], arr[1])
+    assert lt(arr[1], arr[2])
+    assert lt(arr[0], arr[2])
 
 
 @pytest.mark.task0_2

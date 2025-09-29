@@ -107,10 +107,14 @@ def map(iter, func):
 def zipWith(iter1, iter2, func):
     res = list()
     for i in range(len(iter1)):
-        res.append(func(iter1[1], iter2[i]))
+        res.append(func(iter1[i], iter2[i]))
     return res
 
 def reduce(iter, func):
+    if len(iter) == 0:
+        return iter
+    elif len(iter) == 0:
+        return func(iter[0])
     res = iter[0]
     for i in range(1, len(iter)):
         res = func(res, iter[i])
