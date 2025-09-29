@@ -1,4 +1,5 @@
 from typing import Callable, List, Tuple
+import random
 
 import pytest
 from hypothesis import given
@@ -107,16 +108,23 @@ def test_sigmoid(a: float) -> None:
     * It crosses 0 at 0.5
     * It is  strictly increasing.
     """
-    # TODO: Implement for Task 0.2.
-    raise NotImplementedError("Need to implement for Task 0.2")
+    assert 0 <= sigmoid(a) <= 1
+    assert abs(1 - sigmoid(a) - sigmoid(-a)) < 0.01
+    assert sigmoid(a + 0.1) - sigmoid(a) >= 0
+    assert abs(sigmoid(0) - 0.5) < 0.01
 
 
 @pytest.mark.task0_2
 @given(small_floats, small_floats, small_floats)
 def test_transitive(a: float, b: float, c: float) -> None:
     """Test the transitive property of less-than (a < b and b < c implies a < c)"""
-    # TODO: Implement for Task 0.2.
-    raise NotImplementedError("Need to implement for Task 0.2")
+    arr = [a, b, c]
+    arr.sort()
+    if a == b or b == c or a == c:
+        return
+    assert lt(arr[0], arr[1])
+    assert lt(arr[1], arr[2])
+    assert lt(arr[0], arr[2])
 
 
 @pytest.mark.task0_2
@@ -124,8 +132,9 @@ def test_symmetric() -> None:
     """Write a test that ensures that :func:`minitorch.operators.mul` is symmetric, i.e.
     gives the same value regardless of the order of its input.
     """
-    # TODO: Implement for Task 0.2.
-    raise NotImplementedError("Need to implement for Task 0.2")
+    for a in range(-100000, 100000, 10000):
+        for b in range(-10, 10):
+            assert mul(a, b) == mul(b, a)
 
 
 @pytest.mark.task0_2
@@ -133,15 +142,19 @@ def test_distribute() -> None:
     r"""Write a test that ensures that your operators distribute, i.e.
     :math:`z \times (x + y) = z \times x + z \times y`
     """
-    # TODO: Implement for Task 0.2.
-    raise NotImplementedError("Need to implement for Task 0.2")
+    for _ in range(100):
+        z = random.random()
+        x = random.random()
+        y = random.random()
+        assert abs(mul(z, add(x, y)) - mul(z, x) - mul(z, y)) < 0.01
 
 
 @pytest.mark.task0_2
 def test_other() -> None:
     """Write a test that ensures some other property holds for your functions."""
-    # TODO: Implement for Task 0.2.
-    raise NotImplementedError("Need to implement for Task 0.2")
+    for _ in range(100):
+        z = random.random()
+        assert relu(z) >= 0
 
 
 # ## Task 0.3  - Higher-order functions
@@ -168,8 +181,16 @@ def test_sum_distribute(ls1: List[float], ls2: List[float]) -> None:
     """Write a test that ensures that the sum of `ls1` plus the sum of `ls2`
     is the same as the sum of each element of `ls1` plus each element of `ls2`.
     """
-    # TODO: Implement for Task 0.3.
-    raise NotImplementedError("Need to implement for Task 0.3")
+    sum_ls1 = 0
+    for elem in ls1:
+        sum_ls1 += elem
+    sum_ls2 = 0
+    for elem in ls2:
+        sum_ls2 += elem
+    sum_sum_dist = 0
+    for elem in addLists(ls1, ls2):
+        sum_sum_dist += elem
+    assert abs(sum_sum_dist - sum_ls1 - sum_ls2) < 0.01
 
 
 @pytest.mark.task0_3

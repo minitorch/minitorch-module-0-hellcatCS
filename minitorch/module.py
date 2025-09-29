@@ -31,13 +31,21 @@ class Module:
 
     def train(self) -> None:
         """Set the mode of this module and all descendent modules to `train`."""
-        # TODO: Implement for Task 0.4.
-        raise NotImplementedError("Need to implement for Task 0.4")
+        self.training = True
+        for _, par in self._parameters.items():
+            if hasattr(par, "requires_grad_"):
+                par.value.requires_grad_(True)
+        for _, mod in self._modules.items():
+            mod.train()
 
     def eval(self) -> None:
         """Set the mode of this module and all descendent modules to `eval`."""
-        # TODO: Implement for Task 0.4.
-        raise NotImplementedError("Need to implement for Task 0.4")
+        self.training = False
+        for _, par in self._parameters.items():
+            if hasattr(par, "requires_grad_"):
+                par.value.requires_grad_(False)
+        for _, mod in self._modules.items():
+            mod.eval()
 
     def named_parameters(self) -> Sequence[Tuple[str, Parameter]]:
         """Collect all the parameters of this module and its descendents.
@@ -47,13 +55,21 @@ class Module:
             The name and `Parameter` of each ancestor parameter.
 
         """
-        # TODO: Implement for Task 0.4.
-        raise NotImplementedError("Need to implement for Task 0.4")
+        params = list()
+        for name, param in self._parameters.items():
+            params.append((name, param))
+        for pref, mod in self._modules.items():
+            for name, param in mod.named_parameters():
+                params.append((f"{pref}.{name}", param))
+        return params
 
     def parameters(self) -> Sequence[Parameter]:
         """Enumerate over all the parameters of this module and its descendents."""
-        # TODO: Implement for Task 0.4.
-        raise NotImplementedError("Need to implement for Task 0.4")
+        params:list[Parameter] = list()
+        for _, mod in self._modules.items():
+            params.extend(mod.parameters())
+        params.extend(self._parameters.values())
+        return params
 
     def add_parameter(self, k: str, v: Any) -> Parameter:
         """Manually add a parameter. Useful helper for scalar parameters.
@@ -74,9 +90,9 @@ class Module:
 
     def __setattr__(self, key: str, val: Parameter) -> None:
         if isinstance(val, Parameter):
-            self.__dict__["_parameters"][key] = val
+            self._parameters[key] = val
         elif isinstance(val, Module):
-            self.__dict__["_modules"][key] = val
+            self._modules[key] = val
         else:
             super().__setattr__(key, val)
 
