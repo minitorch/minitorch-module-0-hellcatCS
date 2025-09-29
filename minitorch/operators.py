@@ -124,5 +124,5 @@ def addLists(l1, l2):
 def sum(l):
     return reduce(l, add)
 
-def sum(l):
+def prod(l):
     return reduce(l, mul)
